@@ -2,8 +2,8 @@ let theShader;
 
 function preload() {
   theShader = loadShader(
-    "http://127.0.0.1:8887/js/shaders/one_color.vert",
-    "http://127.0.0.1:8887/js/shaders/one_color.frag"
+    "http://127.0.0.1:8887/shaders/one_color.vert",
+    "http://127.0.0.1:8887/shaders/one_color.frag"
   );
 }
 
