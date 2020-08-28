@@ -2,6 +2,12 @@ let index = 1;
 let mult = 1;
 let resolution = 1000;
 vertexList = [];
+const bg = [50, 23, 28];
+const color = [50, 20, 20];
+const canvasScale = Math.random() / 2 + 0.5;
+const widthRand = 0.5 + (Math.random() - 0.5) / 2;
+const heigthRand = 0.5 + (Math.random() - 0.5) / 2;
+
 class phantom {
   constructor() {
     this.vertices = [
@@ -262,10 +268,13 @@ class phantom {
       [-20, -118.72640000000001]
     ];
     this.noiseOffset = 0;
+    this.phase = 0;
+    this.color = color;
+    this.multiplier = 1;
   }
 
   show() {
-    stroke(10);
+    stroke(this.color[0], this.color[1], this.color[1] * this.multiplier);
     noFill();
     beginShape();
     vertex(this.vertices[0], this.vertices[1]);
@@ -280,7 +289,17 @@ class phantom {
   }
 
   showWithNoise(scale1, scale2) {
-    stroke(10);
+    if (this.phase === 0) {
+      strokeWeight(1);
+      stroke(
+        this.color[0],
+        this.color[1],
+        this.color[2] * this.multiplier * 0.5
+      );
+    } else {
+      strokeWeight(2);
+      stroke(bg[0], bg[1], bg[2]);
+    }
     noFill();
     beginShape();
     for (let i = 0; i < this.vertices.length; i++) {
@@ -317,7 +336,6 @@ class phantom {
         tempVertex[0] += ((vertex2[0] - vertex1[0]) * j) / values;
         tempVertex[1] += ((vertex2[1] - vertex1[1]) * j) / values;
         temporaryVertices.push(tempVertex);
-        console.log(tempVertex);
       }
     }
     this.vertices = temporaryVertices;
@@ -331,10 +349,12 @@ let phant = new phantom();
 // }
 
 function setup() {
-  createCanvas(500, 500);
-  background(200);
+  colorMode(HSB, 100);
+  createCanvas(256, 1080);
+  background(bg[0], bg[1], bg[2]);
   translate(width / 2, height / 2);
   phant.interpolate(10);
+  counter = 0;
 }
 
 function paper() {
@@ -350,14 +370,32 @@ function paper() {
 
 function draw() {
   // background(150);
-  translate(width / 2, height / 2);
-  if (index % 10 == 0) {
-    phant.scale(1.05);
-    phant.showWithNoise(10, 40);
+  translate(width * widthRand, height * heigthRand);
+  scale(canvasScale);
+  if (index % 5 == 0) {
+    phant.scale(1.04);
+    phant.multiplier *= 1.04;
+    phant.showWithNoise(10, 20);
+    phant.color = [phant.color[0], phant.color[1], color[2]];
     index++;
   }
-  phant.showWithNoise(10, 20);
+  phant.showWithNoise(1, 20);
   index++;
+
+  if (index % 240 === 0) {
+    if (phant.phase == 1) {
+      phant.color = color;
+      const val = Math.random() / 4 + 0.1;
+      phant.scale(val);
+      phant.multiplier *= 1 / val;
+      phant.phase = 0;
+    } else if (phant.phase == 0) {
+      phant.color = [bg[0], bg[1], bg[2]];
+      phant.scale(0.3);
+      phant.multiplier = 1;
+      phant.phase = 1;
+    }
+  }
 }
 
 function drawCircleNoise(radius) {

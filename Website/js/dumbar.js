@@ -92,6 +92,8 @@ class grid {
           let y2 = this.columns[i][j][1];
           image(letterBuffer[letter], x1, y1, x2 - x1, y2 - y1);
           charCount += 1;
+          noFill();
+          rect(x1, y1, x2, y2);
         }
       }
     }
@@ -110,10 +112,10 @@ class grid {
   }
 }
 
-let displayText = "tenletters";
-let h = 1000;
-let w = 600;
-let backgroundColor = [255, 150, 253];
+let displayText = "phantom";
+let h = 1080;
+let w = 1920;
+let backgroundColor = [247, 49, 35];
 let letterBuffer = {};
 let spam;
 
@@ -137,7 +139,7 @@ function setup() {
       letterBuffer[char] = buffer;
     }
   }
-  spam = new grid(displayText, 9, 3, [4, 2, 4], h, w, letterBuffer);
+  spam = new grid(displayText, 7, 2, [4, 3], h, w, letterBuffer);
 
   spam.initValues();
   spam.generateColumnValues(true);
